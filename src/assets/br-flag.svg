@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 504">
+  <rect width="720" height="504" fill="#009b3a"/>
+  <path d="M360,72 720,252 360,432 0,252z" fill="#fedf00"/>
+  <circle cx="360" cy="252" r="110" fill="#002776"/>
+  <path d="M360,342a90,90 0 1,1 0,-180a90,90 0 1,1 0,180" fill="#002776"/>
+  <clipPath id="band">
+    <path d="M360,342a90,90 0 1,1 0,-180a90,90 0 1,1 0,180"/>
+  </clipPath>
+  <path d="M288,242h144" stroke="#fff" stroke-width="20"/>
+</svg>

@@ -1,1 +1,127 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Reset and base styles */
+
+/* Material Design */
+@import '@angular/material/prebuilt-themes/purple-green.css';
+
+/* Font Awesome */
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #1a1a1a;
+  color: white;
+  line-height: 1.6;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Range input styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #7c4dff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #6c3fff;
+}
+
+/* Button focus states */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.4);
+}
+
+/* Material Design Customization */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-form-field-appearance-fill .mat-mdc-form-field-flex {
+  background-color: #2a2a2a;
+}
+
+.mat-mdc-form-field-label {
+  color: #888 !important;
+}
+
+.mat-mdc-form-field-underline {
+  background-color: #444 !important;
+}
+
+.mat-mdc-form-field-ripple {
+  background-color: #7c4dff !important;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: #7c4dff;
+}
+
+.mat-mdc-raised-button.mat-primary:hover {
+  background-color: #6c3fff;
+}
+
+.mat-mdc-card {
+  background-color: #2a2a2a;
+  color: white;
+}
+
+.mat-mdc-card-title {
+  color: white;
+}
+
+.mat-mdc-card-subtitle {
+  color: #888;
+}
+
+.mat-mdc-progress-spinner circle {
+  stroke: #7c4dff;
+}
+
+.mat-mdc-progress-bar-fill::after {
+  background-color: #7c4dff;
+}

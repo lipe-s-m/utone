@@ -1,0 +1,46 @@
+<div class="youtube-search" role="region" aria-label="Busca no YouTube">
+  <mat-form-field appearance="fill" class="search-field">
+    <mat-label>Buscar música no YouTube</mat-label>
+    <input type="text" matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Digite o nome da música ou cole um link do YouTube" aria-label="Campo de busca do YouTube" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let result of searchResults()" [value]="result.title" (click)="onVideoSelect(result)">
+      <div class="search-result">
+        <img [src]="result.thumbnail" [alt]="result.title" class="thumbnail" loading="lazy" />
+        <div class="result-info">
+          <div class="title">{{ result.title }}</div>
+          <div class="channel">{{ result.channelTitle }}</div>
+          <div class="duration">{{ result.duration }}</div>
+        </div>
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+
+  <div class="selected-video" *ngIf="selectedVideo()">
+    <mat-card>
+      <img mat-card-image [src]="selectedVideo()?.thumbnail" [alt]="selectedVideo()?.title" />
+      <mat-card-content>
+        <h3>{{ selectedVideo()?.title }}</h3>
+        <p>{{ selectedVideo()?.channelTitle }}</p>
+        <p>Duração: {{ selectedVideo()?.duration }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="downloadAudio()" [disabled]="isLoading()">
+          <mat-icon>download</mat-icon>
+          Baixar áudio
+        </button>
+        <button mat-button color="warn" (click)="clearSelection()" [disabled]="isLoading()">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="loading-overlay" *ngIf="isLoading()">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Baixando áudio...</p>
+  </div>
+</div>

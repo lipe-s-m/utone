@@ -1,0 +1,134 @@
+.youtube-search {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  position: relative;
+  // min-height: 200px;
+
+  .search-field {
+    width: 100%;
+  }
+
+  .search-result {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+
+    .thumbnail {
+      width: 120px;
+      height: 67.5px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .result-info {
+      flex: 1;
+      min-width: 0;
+
+      .title {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .channel {
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .duration {
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .selected-video {
+    mat-card {
+      max-width: 600px;
+      margin: 0 auto;
+
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      mat-card-content {
+        padding: 1rem;
+
+        h3 {
+          margin: 0 0 0.5rem;
+          font-size: 1.25rem;
+        }
+
+        p {
+          margin: 0.25rem 0;
+          color: rgba(0, 0, 0, 0.6);
+        }
+      }
+
+      mat-card-actions {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+      }
+    }
+  }
+
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 1000;
+
+    p {
+      margin: 0;
+      color: rgba(0, 0, 0, 0.87);
+      font-weight: 500;
+    }
+  }
+}
+
+// Tema escuro
+:host-context(.dark-theme) {
+  .youtube-search {
+    .search-result {
+      .result-info {
+        .channel,
+        .duration {
+          color: rgba(255, 255, 255, 0.6);
+        }
+      }
+    }
+
+    .selected-video {
+      mat-card-content {
+        p {
+          color: rgba(255, 255, 255, 0.6);
+        }
+      }
+    }
+
+    .loading-overlay {
+      background-color: rgba(48, 48, 48, 0.9);
+
+      p {
+        color: rgba(255, 255, 255, 0.87);
+      }
+    }
+  }
+}
