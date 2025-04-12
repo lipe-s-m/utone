@@ -2,14 +2,8 @@
   <nav class="sidebar">
     <div class="logo">UTone</div>
     <div class="nav-items">
-      <button class="nav-item" title="Removedor">
-        <i class="fas fa-eraser"></i>
-        <span>Removedor</span>
-      </button>
-      <button class="nav-item" title="Splitter">
-        <i class="fas fa-cut"></i>
-        <span>Splitter</span>
-      </button>
+
+
       <button class="nav-item active" title="Mudar de tom">
         <i class="fas fa-music"></i>
         <span>Mudar de tom</span>
@@ -20,20 +14,13 @@
       </button>
       <button class="nav-item" title="Cortador">
         <i class="fas fa-scissors"></i>
-        <span>Cortador</span>
+        <span>Cortar Audio</span>
       </button>
       <button class="nav-item" title="Juntar">
         <i class="fas fa-link"></i>
-        <span>Juntar</span>
+        <span>Juntar Audios</span>
       </button>
-      <button class="nav-item" title="Gravador">
-        <i class="fas fa-microphone"></i>
-        <span>Gravador</span>
-      </button>
-      <button class="nav-item" title="Karaoke">
-        <i class="fas fa-microphone-alt"></i>
-        <span>Karaoke</span>
-      </button>
+
       <button class="nav-item" title="Ajuda">
         <i class="fas fa-question-circle"></i>
         <span>Ajuda</span>
@@ -48,8 +35,8 @@
     <div class="content-container">
       <h1>Mude o Tom da Música ou Audio</h1>
       <p class="subtitle">
-        Altere o tom e o velocidade da música ajustando a tecla músical e os
-        controles deslizantes de bpm
+        Altere o tom e o velocidade da música através dos botões ou ajustando nos
+        controles deslizantes
       </p>
 
       <div class="source-options">
@@ -69,15 +56,11 @@
         </div>
       </div>
 
-      <div #waveform class="waveform-container" [style.display]="audioUploaded ? 'block' : 'none'" style="width: 100%; min-height: 100px;"></div>
+      <div #waveform class="waveform-container" [class.waveform-hidden]="!audioUploaded" style="width: 100%; min-height: 100px;"></div>
 
       <div class="audio-controls" *ngIf="audioUploaded">
         <div class="control-panel">
-          <div class="slider-group">
-            <label>Tom</label>
-            <input type="range" min="-12" max="12" [value]="audioState.pitch" (input)="onPitchChange($event)" />
-            <span class="value">{{ audioState.pitch }}</span>
-          </div>
+          <app-pitch-control></app-pitch-control>
 
           <div class="slider-group">
             <label>BPM</label>

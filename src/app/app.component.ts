@@ -18,17 +18,18 @@ import { AudioRecorderComponent } from './components/audio-recorder/audio-record
 import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { YoutubeService } from './services/youtube.service';
+import { PitchControlComponent } from './components/pitch-control/pitch-control.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
     YoutubeSearchComponent,
     AudioRecorderComponent,
     MaterialModule,
     HttpClientModule,
+    PitchControlComponent,
   ],
   providers: [AudioProcessorService, YoutubeService],
   templateUrl: './app.component.html',

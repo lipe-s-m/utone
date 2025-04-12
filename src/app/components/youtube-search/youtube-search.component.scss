@@ -10,40 +10,53 @@
     width: 100%;
   }
 
-  .search-result {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0;
+  // Estilos específicos para o auto-complete
+  ::ng-deep .mat-mdc-autocomplete-panel {
+    .search-result {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      width: 100%;
 
-    .thumbnail {
-      width: 120px;
-      height: 67.5px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-
-    .result-info {
-      flex: 1;
-      min-width: 0;
-
-      .title {
-        font-weight: 500;
-        margin-bottom: 0.25rem;
-        white-space: nowrap;
+      .thumbnail-container {
+        flex: 0 0 80px;
+        width: 80px;
+        height: 45px;
         overflow: hidden;
-        text-overflow: ellipsis;
+
+        img.thumbnail {
+          width: 80px;
+          height: 45px;
+          object-fit: cover;
+          border-radius: 3px;
+          display: block;
+        }
       }
 
-      .channel {
-        color: rgba(0, 0, 0, 0.6);
-        font-size: 0.875rem;
-        margin-bottom: 0.25rem;
-      }
+      .result-info {
+        flex: 1;
+        min-width: 0;
 
-      .duration {
-        color: rgba(0, 0, 0, 0.6);
-        font-size: 0.875rem;
+        .title {
+          font-size: 13px;
+          font-weight: 500;
+          margin-bottom: 3px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .channel {
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.6);
+          margin-bottom: 2px;
+        }
+
+        .duration {
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.6);
+        }
       }
     }
   }
@@ -55,7 +68,7 @@
 
       img {
         width: 100%;
-        height: auto;
+        max-height: 338px; // 16:9 ratio para 600px de largura
         object-fit: cover;
       }
 
@@ -69,7 +82,7 @@
 
         p {
           margin: 0.25rem 0;
-          color: rgba(0, 0, 0, 0.6);
+          color: rgba(255, 255, 255, 0.774);
         }
       }
 
@@ -131,4 +144,47 @@
       }
     }
   }
+}
+
+// Ajusta o tamanho do painel de auto-complete
+::ng-deep .mat-mdc-autocomplete-panel {
+  max-height: 400px !important;
+}
+
+// Ajusta o tamanho das opções do auto-complete
+::ng-deep .mat-mdc-option {
+  height: auto !important;
+  line-height: 1.2 !important;
+  padding: 4px !important;
+
+  .thumbnail-container {
+    width: 80px !important;
+    height: 45px !important;
+
+    img.thumbnail {
+      width: 80px !important;
+      height: 45px !important;
+      max-width: 80px !important;
+      max-height: 45px !important;
+    }
+  }
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally */
+  padding: 10px 16px; /* Match mat-option padding */
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.7); /* Lighter text color */
+  font-style: italic;
+  cursor: default; /* Ensure it doesn't look clickable */
+}
+
+/* Style the spinner */
+.loading-indicator
+  mat-spinner
+  ::ng-deep
+  .mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: rgba(255, 255, 255, 0.7);
 }

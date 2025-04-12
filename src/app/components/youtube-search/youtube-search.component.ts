@@ -14,11 +14,19 @@ import {
   distinctUntilChanged,
   filter,
   switchMap,
+  tap,
 } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 interface YoutubeVideo {
   id: string;
+  title: string;
+  thumbnail: string;
+  channelTitle: string;
+  duration: string;
+}
+
+interface AutocompleteSuggestion {
   title: string;
   thumbnail: string;
   channelTitle: string;
@@ -50,6 +58,7 @@ export class YoutubeSearchComponent {
   searchResults = signal<YoutubeVideo[]>([]);
   selectedVideo = signal<YoutubeVideo | null>(null);
   isLoading = signal(false);
+  isSearchingSuggestions = signal(false);
   private searchSubject = new Subject<string>();
 
   constructor(private youtubeService: YoutubeService) {
@@ -59,22 +68,32 @@ export class YoutubeSearchComponent {
   private setupSearch() {
     this.searchControl.valueChanges
       .pipe(
-        debounceTime(130),
+        debounceTime(200),
         distinctUntilChanged(),
         filter((query): query is string => !!query && query.length > 2),
+        tap(() => this.isSearchingSuggestions.set(true)),
         switchMap((query: string) => {
           if (this.isYoutubeUrl(query)) {
             this.handleUrlInput();
+            this.isSearchingSuggestions.set(false);
             return [];
           }
-          return this.youtubeService.search(query);
+          return this.youtubeService.getAutocompleteSuggestions(query);
         })
       )
-      .subscribe((results) => {
-        if (Array.isArray(results)) {
-          this.searchResults.set(results);
+      .subscribe(
+        (results) => {
+          this.isSearchingSuggestions.set(false);
+          if (Array.isArray(results)) {
+            this.searchResults.set(results);
+          }
+        },
+        (error) => {
+          console.error('Error fetching suggestions:', error);
+          this.isSearchingSuggestions.set(false);
+          this.searchResults.set([]);
         }
-      });
+      );
   }
 
   onSearchInput(query: string) {

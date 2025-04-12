@@ -47,6 +47,27 @@ export class YoutubeService {
       );
   }
 
+  getAutocompleteSuggestions(query: string): Observable<YoutubeSearchResult[]> {
+    if (!query.trim()) {
+      return of([]);
+    }
+
+    return this.http
+      .get<YoutubeSearchResult[]>(
+        `${this.API_URL}/autocomplete?q=${encodeURIComponent(query)}`
+      )
+      .pipe(
+        map((results) => {
+          this.searchResults.set(results);
+          return results;
+        }),
+        catchError((error) => {
+          console.error('Erro ao buscar sugestões:', error);
+          return of([]);
+        })
+      );
+  }
+
   async downloadAudio(videoId: string): Promise<Blob> {
     this.isLoading.set(true);
 

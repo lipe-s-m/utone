@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import WaveSurfer from 'wavesurfer.js';
 import { ToastService } from './toast.service';
+import { HttpClient } from '@angular/common/http';
 
 export interface AudioState {
   isPlaying: boolean;
@@ -19,6 +20,7 @@ export class AudioProcessorService {
   private wavesurfer: WaveSurfer | null = null;
   private audioContext: AudioContext | null = null;
   private isInitialized = false;
+  private currentAudioBlob: Blob | null = null;
 
   // Signals for reactive state management
   private audioStateSignal = signal<AudioState>({
@@ -37,8 +39,9 @@ export class AudioProcessorService {
   readonly pitch = signal(0);
   readonly tempo = signal(1);
   readonly volume = signal(1);
+  readonly isProcessingPitch = signal(false);
 
-  constructor(private toast: ToastService) {
+  constructor(private toast: ToastService, private http: HttpClient) {
     this.initAudioContext();
   }
 
@@ -124,20 +127,25 @@ export class AudioProcessorService {
   }
 
   async loadFile(file: File) {
-    if (!this.isInitialized || !this.wavesurfer) {
-      this.toast.error('Player de áudio não inicializado');
+    if (!this.wavesurfer) {
+      console.error('WaveSurfer not initialized');
       return;
     }
 
     try {
-      console.log('Loading audio file:', file.name);
-      const url = URL.createObjectURL(file);
-      await this.wavesurfer.load(url);
-      URL.revokeObjectURL(url);
-      this.toast.success('Áudio carregado com sucesso');
+      // Store the original audio file
+      this.currentAudioBlob = file;
+
+      // Load into wavesurfer
+      await this.wavesurfer.loadBlob(file);
+
+      // Reset audio state
+      this.pitch.set(0);
+      this.tempo.set(1);
+      this.volume.set(1);
     } catch (error) {
-      console.error('Error loading audio file:', error);
-      this.toast.error('Erro ao carregar o arquivo de áudio');
+      console.error('Error loading file:', error);
+      this.toast.error('Erro ao carregar arquivo');
     }
   }
 
@@ -166,22 +174,48 @@ export class AudioProcessorService {
     this.currentTime.set(0);
   }
 
-  setPitch(semitones: number) {
-    if (!this.isInitialized || !this.wavesurfer) {
+  async setPitch(semitones: number) {
+    if (!this.isInitialized || !this.wavesurfer || !this.currentAudioBlob) {
       this.toast.error('Player de áudio não inicializado');
       return;
     }
 
+    this.isProcessingPitch.set(true);
+    const wasPlaying = this.isPlaying();
+    if (wasPlaying) {
+      this.pause();
+    }
+
     try {
-      // Convert semitones to pitch rate
-      const pitchRate = Math.pow(2, semitones / 12);
-      const currentTempo = this.tempo();
-      this.wavesurfer.setPlaybackRate(pitchRate * currentTempo);
-      this.pitch.set(semitones);
-      console.log('Pitch set to:', semitones, 'Rate:', pitchRate);
-    } catch (error) {
+      // Create form data
+      const formData = new FormData();
+      formData.append('file', this.currentAudioBlob);
+      formData.append('pitch', semitones.toString());
+      formData.append('tempo', this.tempo().toString());
+
+      // Send to backend
+      const response = await this.http
+        .post('http://localhost:3000/api/audio/process', formData, {
+          responseType: 'blob',
+        })
+        .toPromise();
+
+      if (response) {
+        await this.wavesurfer?.loadBlob(response);
+        this.pitch.set(semitones);
+
+        if (wasPlaying) {
+          this.play();
+        }
+      } else {
+        this.toast.error('Resposta inválida do servidor ao ajustar o tom');
+      }
+    } catch (error: any) {
       console.error('Error setting pitch:', error);
-      this.toast.error('Erro ao ajustar o tom');
+      const errorDetail = error?.message || 'Erro desconhecido';
+      this.toast.error(`Erro ao ajustar o tom: ${errorDetail}`);
+    } finally {
+      this.isProcessingPitch.set(false);
     }
   }
 
